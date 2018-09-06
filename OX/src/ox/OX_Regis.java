@@ -207,21 +207,37 @@ public class OX_Regis extends javax.swing.JFrame {
              mail = input_email.getText();
              
             try {
-                Register.sendToServer(id, pass, name, surname, mail);
-                 JOptionPane.showMessageDialog(null, "Success");
-                input_pass.setText("");
-                input_Cpass.setText("");
-                input_id.setText("");
-                input_name.setText("");
-                input_surname.setText("");
-                input_email.setText("");
+                 JSONObject check = Register.sendToServer(id, pass, name, surname, mail);
+                
+                if(check.getInt("status") == 0){
+                    JOptionPane.showMessageDialog(null, "Success");
+                    
+                    input_pass.setText("");
+                    input_Cpass.setText("");
+                    input_id.setText("");
+                    input_name.setText("");
+                    input_surname.setText("");
+                    input_email.setText("");
+                     
+                }else if(check.getInt("status")== 1){
+                    String Alart = check.getString("message");
+                    JOptionPane.showMessageDialog(null,Alart );
+                    
+                    if(Alart.equals("Username is already in use")){
+                         input_id.setText("");
+                         input_pass.setText("");
+                         input_Cpass.setText("");
+                    }
+                    else if(Alart.equals("E-Mail is already in use")){
+                         input_email.setText("");
+                    }
+                }
+                
                 
             } catch (Exception e) {
-                
+            
             }
             
-            
-             
         }else{
             String mis = "A password mismatch (pls, try again)";
             JOptionPane.showMessageDialog(null, mis);
